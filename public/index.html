@@ -25,7 +25,35 @@
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
+    <div id="errors" style="
+      display: none;
+      margin: -20px -20px 20px;
+      padding: 20px;
+      background: #c00;
+      white-space: pre-wrap;
+      color: #fff;
+    "></div>
     <div id="root"></div>
+    <script>
+        window.addEventListener('mousedown', function (e) {
+            document.body.classList.add('mouse-navigation');
+            document.body.classList.remove('kbd-navigation');
+        });
+        window.addEventListener('keydown', function (e) {
+            if(e.code === 9) {
+                document.body.classList.add('kbd-navigation');
+                document.body.classList.remove('mouse-navigation');
+            }
+        });
+        window.addEventListener('click', function (e) {
+            if(e.target.tagName === 'A' && e.target.getAttribute('href') === '#') {
+                e.preventDefault();
+            }
+        });
+        window.onerror = function (message, source, line, col, error) {
+            var text = error? error.stack || error : message + '(at ' + source + ':' + line + ':' + col + ')';
+        }
+    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
