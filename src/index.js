@@ -18,15 +18,22 @@ class Board extends React.Component {
         super(props);
         this.state = {
             squares: Array(9).fill(null),
+            xIsNext: true,
         }
     }
 
     handleClick(i) {
         const squares = this.state.squares.slice(); 
+        if(calculateWinner(this.state.squares) || squares[i]) {
+            return;
+        }
         // 不可变性：immutable，
         // 使用新数据替换旧数据 -> 撤销和恢复; 跟踪数据改变; 在React中创建pure components，确定何时重新渲染shouldComponentUpdate()
-        squares[i] = 'X';
-        this.setState({squares: squares});
+        squares[i] = this.state.xIsNext? 'X': 'O';
+        this.setState({
+            squares: squares,
+            xIsNext: !this.state.xIsNext,
+        });
     }
 
     renderSquare(i) {
@@ -39,7 +46,13 @@ class Board extends React.Component {
     }
 
     render() {
-        const status = 'Next player: X';
+        const winner = calculateWinner(this.state.squares);
+        let status;
+        if (winner) {
+            status = 'Winner: ' + winner;
+        } else {
+            status = 'Next player: ' + (this.state.xIsNext? 'X': 'O');
+        }
 
         return (
             <div>
@@ -86,3 +99,26 @@ ReactDOM.render(
     <Game />,
     document.getElementById('root')
 )
+
+/***
+ * 判断胜负的helper函数
+ */
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
