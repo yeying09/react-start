@@ -3,20 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: null,
-        }
-    }
-
     render() {
         return (
             <button 
                 className="square" 
-                onClick={() => this.setState({value: 'X'})}
+                onClick={() => this.props.onClick()}
             >
-                {this.state.value}
+                {this.props.value}
             </button>
         );
     }
@@ -30,8 +23,21 @@ class Board extends React.Component {
         }
     }
 
+    handleClick(i) {
+        const squares = this.state.squares.slice(); 
+        // 不可变性：immutable，
+        // 使用新数据替换旧数据 -> 撤销和恢复; 跟踪数据改变; 在React中创建pure components，确定何时重新渲染shouldComponentUpdate()
+        squares[i] = 'X';
+        this.setState({squares: squares});
+    }
+
     renderSquare(i) {
-        return <Square value={this.state.squares[i]} />;
+        return (
+            <Square 
+                value={this.state.squares[i]} 
+                onClick={() => this.handleClick(i)}
+            />
+        );
     }
 
     render() {
