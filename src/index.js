@@ -85,7 +85,7 @@ class Game extends React.Component {
     }
 
     render() {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
 
@@ -104,7 +104,12 @@ class Game extends React.Component {
         if(winner) {
             status = 'Winner: ' + winner;
         } else {
-            status = 'Next player: ' + (this.state.xIsNext? 'X': 'O');
+            if(history.length === current.squares.length + 1 
+                && this.state.stepNumber === current.squares.length) { // 没有决出胜负->判断是否走完九步
+                status = '-- Draw --';
+            } else {
+                status = 'Next player: ' + (this.state.xIsNext? 'X': 'O');
+            }
         }
 
         return (
