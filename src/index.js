@@ -24,23 +24,23 @@ class Board extends React.Component {
     }
 
     render() {
+        let arrays = [0, 1, 2];
+
         return (
             <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+                {
+                    arrays.map((item, index) => {
+                        return (
+                            <div className="board-row">
+                                {
+                                    arrays.map((subitem, subindex) => {
+                                        return (this.renderSquare(3*index + subindex))
+                                    })
+                                }
+                            </div>
+                        )
+                    })
+                }
             </div>
         );
     }
@@ -101,23 +101,18 @@ class Game extends React.Component {
             const desc = move ?
                 'go to move #' + move + '(' + step.position.x + ',' + step.position.y + ')':
                 'go to start';
-
-            if(move === this.state.stepNumber) {
-                return (
-                    <li key={move}>
+            
+            return (
+                <li key={move}>
+                    {
                         <button 
-                            style={{fontWeight: 'bold'}} 
+                            style={move === this.state.stepNumber?{fontWeight: 'bold'}:{}} 
                             onClick={() => this.jumpTo(move)}
                         >{desc}</button>
-                    </li>
-                );
-            } else {
-                return (
-                    <li key={move}>
-                        <button onClick={() => this.jumpTo(move)}>{desc}</button>
-                    </li>
-                )
-            }
+                    }
+                    
+                </li>
+            )
         });
 
         let status;
