@@ -27,7 +27,15 @@ class Board extends React.Component {
 
     render() {
         let arrays = [0, 1, 2];
+        console.log(this);
 
+        console.log(this instanceof Board);// true
+        console.log(this instanceof React.Component);// true
+        console.log(this instanceof Object);// true
+        console.log(this instanceof Square);// false
+        console.log(this instanceof Game);// false
+
+        console.log('checkArray', Array.isArray(arrays), Array.isArray(null))
         return (
             <div>
                 {
